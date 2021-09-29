@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar  color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button text="Atrás"></ion-back-button>
+    </ion-buttons>
+    <ion-text slot="end">SOBRE NOSOTROS</ion-text>  
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="10" sizeMd="4" sizeLg="4" pushLg="4" pushMd="4" >
+        <ion-row>
+          <ion-col>
+            <h4 style="font-weight: bold;">Sobre nosotros, Senshi</h4>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-img style="width: 100%;" src="../../../assets/sistema/pensando.png"></ion-img>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <p style="text-align: justify;">
+              Senshi, es una aplicación diseñada para hacer
+              más senshilla la vida de nuestros usuarios, enlistando
+              sus tareas y horarios de una manera organizada
+            </p>
+          </ion-col>
+        </ion-row>
+      
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-fab  vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="/login" color="socondary">
+      <ion-img src="../../../assets/sistema/logo.png"></ion-img>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

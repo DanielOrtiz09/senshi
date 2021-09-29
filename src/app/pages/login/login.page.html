@@ -1,0 +1,61 @@
+<ion-header >
+  <ion-toolbar color="primary">
+    <ion-title>Bienvenid@ a Senshi</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" push="3" sizeMd="4" sizeLg="4" pushLg="4" pushMd="4" >
+        <div style="text-align: center;">
+          <ion-img src="../../../assets/sistema/logo.png"></ion-img>
+          <p style="font-size: 16px; font-weight: bold;">Senshi</p>
+        </div>
+      </ion-col>
+    </ion-row>
+    <br>
+    <br>
+    <ion-row>
+      <ion-col size="12" sizeMd="6" sizeLg="6" pushLg="3" pushMd="3"  pullLg="3" pullMd="3" >
+        <div>
+          <ion-item>
+            <ion-input [(ngModel)]="usuario" maxlength="100" type="text" placeholder="Correo electrónico"></ion-input>
+          </ion-item>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" sizeMd="6" sizeLg="6" pushLg="3" pushMd="3" pullLg="3" pullMd="3"  >
+        <div>
+          <ion-item>
+            <ion-input [(ngModel)]="clave" maxlength="16" placeholder="Contraseña" type="password"></ion-input>
+          </ion-item>
+         
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      
+      <ion-col size="12" sizeMd="6" sizeLg="6" pushLg="3" pushMd="3" pullLg="3" pullMd="3"  >
+        <div>
+
+          <ion-button  (click)="iniciarSesion()" expand="full" color="primary">Iniciar sesión</ion-button>
+          
+        </div>
+
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      
+      <ion-col size="12" sizeMd="6" sizeLg="6" pushLg="3" pushMd="3" pullLg="3" pullMd="3"  >
+        <div>
+
+          <ion-button   [routerLink]="['/registro']" expand="full" color="primary">Registrarse</ion-button>
+          
+        </div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
