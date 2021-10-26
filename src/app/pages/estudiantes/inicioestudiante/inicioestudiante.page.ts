@@ -12,4 +12,12 @@ export class InicioestudiantePage implements OnInit {
   ngOnInit() {
   }
 
+  cerrarSesion(){
+    localStorage.removeItem('datosUsuario');
+    localStorage.removeItem('datosTipoUsuario');
+    localStorage.removeItem('datosTipoUsuarioTemporal');
+    window.location.href = '/login';
+  }
+
+
 }

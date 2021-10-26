@@ -20,16 +20,22 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-card  *ngFor="let item of listaHorario">
+            <ion-card  *ngFor="let item of listaHorario;let i = index">
               <ion-card-header>
-                <ion-card-subtitle>{{item.dia}}</ion-card-subtitle>
+                <ion-card-subtitle>{{item.nombreDia}}</ion-card-subtitle>
               </ion-card-header>
             
               <ion-card-content>
 
-                <ion-card  *ngFor="let itemMaterias of item.materias">
+                <ion-card  *ngFor="let itemMaterias of item.arrayMaterias;let iMateria = index">
                   <ion-card-header>
-                    <ion-card-subtitle>Docente: {{itemMaterias.docente}}</ion-card-subtitle>
+                    <ion-buttons>
+                      <ion-button (click)="presentarMenuEliminarHorario(itemMaterias)">
+                        <ion-icon slot="icon-only"  name="close-circle-outline"></ion-icon>
+                      </ion-button>
+                    </ion-buttons>
+                    
+                    <ion-card-subtitle>Docente:{{itemMaterias.nombreDocente}}</ion-card-subtitle>
                     <ion-card-subtitle>Materia: {{itemMaterias.nombreMateria}}</ion-card-subtitle>
                   </ion-card-header>
                 
@@ -50,9 +56,15 @@
     </ion-row>
   </ion-grid>
 
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button routerLink="/ingresarhorario">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 
   <ion-fab  vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button routerLink="/login" color="socondary">
+    <ion-fab-button (click)="cerrarSesion()" color="socondary">
       <ion-img src="../../../assets/sistema/logo.png"></ion-img>
     </ion-fab-button>
   </ion-fab>

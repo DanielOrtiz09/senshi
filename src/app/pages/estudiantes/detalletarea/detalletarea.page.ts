@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController, LoadingController } from '@ionic/angular';
+import { TareasService } from 'src/app/servicios/tareas.service';
 
 @Component({
   selector: 'app-detalletarea',
@@ -11,45 +13,86 @@ export class DetalletareaPage implements OnInit {
   listaTareas:any[] = [];
   objTarea: any[];
   id: string;
+  idAsignarTipoUsuario: any;
+  mensaje: string;
   constructor(
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    public router:Router,
+    private _servicioTareas:TareasService,
+    private loadingController: LoadingController,
+    private alertController:AlertController,
   ) {
-    this.listaTareas = [
-      {
-        id:1,
-        nombreTarea:"Tarea 1",
-        fechaPublicada:"Lunes 4 de octubre 09:00:00",
-        fechaEntrega:"Martes 5 de octubre 10:00:00",
-        detalleTarea:"Desarrollar una aplicación móvil en ionic",
-        docente:"Juan",
-  
-      },
-      {
-        id:2,
-        nombreTarea:"Tarea 2",
-        fechaPublicada:"Lunes 4 de octubre 12:00:00",
-        fechaEntrega:"Miércoles 6 de octubre 10:00:00",
-        detalleTarea:"Desarrollar una aplicación móvil en laravel y mysql",
-        docente:"Miguel"
-      },
-      {
-        id:3,
-        nombreTarea:"Tarea 3",
-        fechaPublicada:"Lunes 4 de octubre 13:00:00",
-        fechaEntrega:"Jueves 7 de octubre 08:00:00",
-        detalleTarea:"Traer el modelo entidad relación de la base de datos propuesta en la exposición del grupo 1",
-        docente:"María"
-      }
-  
-    ];
+    
     this.route.params.subscribe(parameter => {
       this.id = parameter['id'];
     });
     
    }
 
+   
+
+ 
+
   ngOnInit() {
-    this.objTarea = this.listaTareas.filter(xx => xx.id === parseInt(this.id));
+    var listaTipoUsuario = JSON.parse(localStorage.getItem('datosTipoUsuario'));
+
+    this.idAsignarTipoUsuario = listaTipoUsuario.idAsignarTipoUsuario;
+    this.filtrarTarea();
+  }
+
+  async filtrarTarea(){
+    let cargando = await this.loadingController.create({
+      message: "Espera miesntras se carga el formulario...",
+    });
+    this.mensaje = '';
+    
+    if(this.idAsignarTipoUsuario == null || this.idAsignarTipoUsuario == ""){
+      this.mensaje = "No se encuentra el índice del usuario";
+      this.presentMensaje("Error",this.mensaje);
+    }else{
+      
+      cargando.present();
+      this._servicioTareas.filtrarTarea(this.idAsignarTipoUsuario,this.id).subscribe(
+        data=>{
+          console.log(data)
+          if(data['validar'] == true){
+            this.listaTareas = data['arrayTareas'];
+            console.log(this.listaTareas)
+          }else{
+            this.mensaje = data['mensaje'];
+            this.presentMensaje("Error",this.mensaje);
+          }
+          cargando.dismiss();
+      },
+      error=>{
+        cargando.dismiss();
+        if(error.status == 0){
+          this.mensaje = "No tienes conexión a internet";
+        }else{
+          this.mensaje = "Error interno de la App";
+        }
+        this.presentMensaje("Error",this.mensaje);
+      }
+      );
+    }
+  }
+
+  async presentMensaje(titulo:string,mensaje:string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: titulo,
+      message: mensaje,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
+
+  cerrarSesion(){
+    localStorage.removeItem('datosUsuario');
+    localStorage.removeItem('datosTipoUsuario');
+    localStorage.removeItem('datosTipoUsuarioTemporal');
+    window.location.href = '/login';
   }
 
 }

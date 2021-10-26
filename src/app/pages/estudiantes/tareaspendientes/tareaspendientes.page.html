@@ -16,11 +16,17 @@
           <ion-col>
             <ion-list>
               <ion-list-header>TAREAS PENDIENTES DE LA SEMANA</ion-list-header>
-              <ion-item routerLink="/detalletarea/{{item.id}}" *ngFor="let item of listaTareas">
-                <ion-label>
+              <ion-item   *ngFor="let item of listaTareas">
+                <ion-label routerLink="/detalletarea/{{item.id}}">
                   <h3>{{item.nombreTarea}}</h3>
-                  <p>Fecha: {{item.fechaEntrega}}</p>
+                  <p>Fecha: {{item.fechaEntrega}} {{item.horaEntrega}}</p>
+                  
                 </ion-label>
+                <ion-buttons slot="end">
+                  <ion-button (click)="presentarMenuEliminarTarea(item)">
+                    <ion-icon slot="icon-only"  name="trash-outline"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
               </ion-item>
             </ion-list>
           </ion-col>
@@ -28,8 +34,13 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button routerLink="/ingresartarea">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
   <ion-fab  vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button routerLink="/login" color="socondary">
+    <ion-fab-button (click)="cerrarSesion()" color="socondary">
       <ion-img src="../../../assets/sistema/logo.png"></ion-img>
     </ion-fab-button>
   </ion-fab>

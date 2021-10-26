@@ -4,78 +4,81 @@ import { AlertController, LoadingController } from '@ionic/angular';
 import { TareasService } from 'src/app/servicios/tareas.service';
 
 @Component({
-  selector: 'app-tareaspendientes',
-  templateUrl: './tareaspendientes.page.html',
-  styleUrls: ['./tareaspendientes.page.scss'],
+  selector: 'app-ingresartarea',
+  templateUrl: './ingresartarea.page.html',
+  styleUrls: ['./ingresartarea.page.scss'],
 })
-export class TareaspendientesPage implements OnInit {
+export class IngresartareaPage implements OnInit {
 
-  listaTareas:any[] = [];
-  mensaje: string;
   idAsignarTipoUsuario: any;
-  constructor(
+  mensaje: string;
+  listaMaterias: any[] = [];
+  idMateriaDocente:any;
+  horaEntrega:any = "07:00";
+  fechaEntrega:any = new Date().toISOString();
+  detalleTarea: any;
+  nombreTarea:any;
+
+   constructor(
     public router:Router,
     private _servicioTareas:TareasService,
     private loadingController: LoadingController,
     private alertController:AlertController,
-  ) { 
-   
-  }
+    ) { 
+      
+    }
+
+
 
   ngOnInit() {
     var listaTipoUsuario = JSON.parse(localStorage.getItem('datosTipoUsuario'));
 
     this.idAsignarTipoUsuario = listaTipoUsuario.idAsignarTipoUsuario;
-    this.cargarTareas();
+    this.cargarDias();
   }
 
-  async presentarMenuEliminarTarea(item:any){
-   
-      const alert = await this.alertController.create({
-        cssClass: 'my-custom-class',
-        header: 'Confirmar!',
-        message: 'Estás segur@ de eliminar <strong>'+item.nombreTarea+'</strong>!!!',
-        buttons: [
-          {
-            text: 'Cancelar',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: (blah) => {
-             
-            }
-          }, {
-            text: 'Eliminar',
-            handler: () => {
-              this.eliminarTarea(item)
-            }
-          }
-        ]
-      });
-  
-      await alert.present();
-
-
-  }
-  async eliminarTarea(item:any){
+  async guardarTarea(){
     let cargando = await this.loadingController.create({
-      message: "Espera mientras se elimina la tarea..",
+      message: "Espera miesntras se gaurda la tarea...",
     });
     this.mensaje = '';
+
+    var fechaEntregaGuardar = new Date(this.fechaEntrega).toISOString();
+    console.log(fechaEntregaGuardar)
+    console.log(this.horaEntrega)
+    
+    
     
     if(this.idAsignarTipoUsuario == null || this.idAsignarTipoUsuario == ""){
       this.mensaje = "No se encuentra el índice del usuario";
       this.presentMensaje("Error",this.mensaje);
+    }else if(this.nombreTarea == null || this.nombreTarea == "" || this.nombreTarea.length < 3){
+      this.mensaje = "Ingresa el nombre/etiqueta de la tarea mínimo 3 caracteres";
+      this.presentMensaje("Error",this.mensaje);
+    }else  if(this.idMateriaDocente == null || this.idMateriaDocente == ""){
+      this.mensaje = "Selecciona una materia";
+      this.presentMensaje("Error",this.mensaje);
+    }else if(this.fechaEntrega == null || this.fechaEntrega == ""){
+      this.mensaje = "Selecciona la fecha de entrega";
+      this.presentMensaje("Error",this.mensaje);
+    }else if(this.horaEntrega == null || this.horaEntrega == ""){
+      this.mensaje = "Selecciona la hora de entrega";
+      this.presentMensaje("Error",this.mensaje);
+    }else if(this.detalleTarea == null || this.detalleTarea == "" || this.detalleTarea.length < 10){
+      this.mensaje = "Ingresa el detalle de la tarea mínimo 10 caracteres";
+      this.presentMensaje("Error",this.mensaje);
     }else{
       
+      
       cargando.present();
-      this._servicioTareas.eliminarTarea(this.idAsignarTipoUsuario,item.id).subscribe(
+      this._servicioTareas.guardarTarea(this.idAsignarTipoUsuario,this.nombreTarea,this.idMateriaDocente,fechaEntregaGuardar,this.horaEntrega,this.detalleTarea).subscribe(
         data=>{
           console.log(data)
-          if(data['validar'] == false){            
+          if(data['validar'] == true){
+            window.location.href = "/tareaspendientes";
+          }else{
             this.mensaje = data['mensaje'];
             this.presentMensaje("Error",this.mensaje);
-          }else{
-            this.cargarTareas();
           }
           cargando.dismiss();
       },
@@ -91,8 +94,9 @@ export class TareaspendientesPage implements OnInit {
       );
     }
   }
-  
-  async cargarTareas(){
+
+
+  async cargarDias(){
     let cargando = await this.loadingController.create({
       message: "Espera miesntras se carga el formulario...",
     });
@@ -104,12 +108,11 @@ export class TareaspendientesPage implements OnInit {
     }else{
       
       cargando.present();
-      this._servicioTareas.cargarTareas(this.idAsignarTipoUsuario).subscribe(
+      this._servicioTareas.cargarMaterias(this.idAsignarTipoUsuario).subscribe(
         data=>{
           console.log(data)
           if(data['validar'] == true){
-            this.listaTareas = data['arrayTareas'];
-            console.log(this.listaTareas)
+            this.listaMaterias = data['arrayMateriaDocentes'];
           }else{
             this.mensaje = data['mensaje'];
             this.presentMensaje("Error",this.mensaje);
@@ -129,8 +132,6 @@ export class TareaspendientesPage implements OnInit {
     }
   }
 
-
-
   async presentMensaje(titulo:string,mensaje:string) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
@@ -140,12 +141,4 @@ export class TareaspendientesPage implements OnInit {
     });
     await alert.present();
   }
-
-  cerrarSesion(){
-    localStorage.removeItem('datosUsuario');
-    localStorage.removeItem('datosTipoUsuario');
-    localStorage.removeItem('datosTipoUsuarioTemporal');
-    window.location.href = '/login';
-  }
-
 }

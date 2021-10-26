@@ -12,20 +12,20 @@
       <ion-col size="12" sizeMd="4" sizeLg="4" pushLg="4" pushMd="4">
         <ion-row>
           <ion-col>
-            <ion-list>
-              <ion-list-header>{{objTarea[0]['nombreTarea']}}</ion-list-header>
+            <ion-list *ngFor="let item of listaTareas">
+              <ion-list-header>{{item.nombreTarea}}</ion-list-header>
               <ion-item>
-                  <h4 style="font-size: 14px;">Docente: {{objTarea[0]['docente']}}</h4>
+                  <h4 style="font-size: 14px;">Docente: {{item.nombreDocente}}</h4>
               </ion-item>
               <ion-item>
-                <p style="font-size: 14px;">Fecha de publicación: {{objTarea[0]['fechaPublicada']}}</p>
+                <p style="font-size: 14px;">Fecha de publicación: {{item.created_at}}</p>
               </ion-item>
               <ion-item>
-                <p style="font-size: 14px;">Fecha de entrega: {{objTarea[0]['fechaEntrega']}}</p>
+                <p style="font-size: 14px;">Fecha de entrega: {{item.fechaEntrega}} {{item.horaEntrega}}</p>
               </ion-item>
               <ion-item>
                 
-                <p style="font-size: 14px;">Detalle: {{objTarea[0]['detalleTarea']}}</p>
+                <p style="font-size: 14px;">Detalle: {{item.detalleTarea}}</p>
               </ion-item>
             </ion-list>
           </ion-col>
@@ -34,7 +34,7 @@
     </ion-row>
   </ion-grid>
   <ion-fab  vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button routerLink="/login" color="socondary">
+    <ion-fab-button (click)="cerrarSesion()" color="socondary">
       <ion-img src="../../../assets/sistema/logo.png"></ion-img>
     </ion-fab-button>
   </ion-fab>
