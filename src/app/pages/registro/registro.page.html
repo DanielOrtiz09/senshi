@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row>
+    <ion-row *ngIf="paso == 1">
       <ion-col size="12" sizeMd="6" sizeLg="6" pushLg="3" pushMd="3"  pullLg="3" pullMd="3" >
         <ion-row>
           <ion-col>
@@ -76,6 +76,26 @@
         </ion-row>
 
       
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="paso == 2">
+      <ion-col size="12" sizeMd="6" sizeLg="6" pushLg="3" pushMd="3"  pullLg="3" pullMd="3" >
+        <ion-row>
+          <ion-col>
+            <ion-card>
+              <ion-card-header>
+                <ion-card-subtitle>YA PUEDES UTILIZAR LOS SERVICIOS DE SENSHI</ion-card-subtitle>
+                <ion-card-title>REGISTRO EXITOSO</ion-card-title>
+              </ion-card-header>
+            
+              <ion-card-content>
+
+                    <ion-button routerLink="/login" expand="full" color="primary">INICIAR SESIÓN</ion-button>
+
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
       </ion-col>
     </ion-row>
     

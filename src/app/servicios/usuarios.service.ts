@@ -11,7 +11,17 @@ export class UsuariosService {
    
 
   }
+  registrarUsuario(usuario:string,clave: string,fechaNacimiento:any){
+    
+    const data:any = {
+      usuario:usuario,
+      clave:clave,
+      fechaNacimiento:fechaNacimiento
+    };
 
+    return this.http.post(`${environment.urlApi}registrarusuario`,JSON.stringify(data),environment.options);
+     
+   }
    loginUsuario(usuario:string,clave: string){
     
     const data:any = {

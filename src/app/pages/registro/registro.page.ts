@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
+import { UsuariosService } from 'src/app/servicios/usuarios.service';
 
 @Component({
   selector: 'app-registro',
@@ -14,11 +15,14 @@ export class RegistroPage implements OnInit {
   contrasena:string = "";
   repitecontrasena:string = "";
   mensajeContrasena: any = "";
+  mensaje: string;
+  paso: number = 1;
 
   constructor(
     public router:Router,
     private alertController:AlertController,
     private loadingController: LoadingController,
+    private _servicioUsuario:UsuariosService
   ) { }
 
   ngOnInit() {
@@ -36,13 +40,35 @@ export class RegistroPage implements OnInit {
       this.presentarMensaje("Error","Las contraseñas no coinciden");
     }else{
 
+
+
       let loading = await this.loadingController.create({
       message: "Registrando...",
 
       });
-      loading.present();
 
-      loading.dismiss();
+      loading.present();
+      this._servicioUsuario.registrarUsuario(this.usuario,this.contrasena,this.fechaNacimiento).subscribe(
+        data=>{
+          console.log(data)
+          if(data['validar'] == false){            
+            this.presentarMensaje("Error",data['mensaje']);
+          }else{
+            
+            this.paso = 2;
+          }
+          loading.dismiss();
+      },
+      error=>{
+        loading.dismiss();
+        if(error.status == 0){
+          this.mensaje = "No tienes conexión a internet";
+        }else{
+          this.mensaje = "Error interno de la App";
+        }
+        this.presentarMensaje("Error",this.mensaje);
+      }
+      );
 
     }
   }
